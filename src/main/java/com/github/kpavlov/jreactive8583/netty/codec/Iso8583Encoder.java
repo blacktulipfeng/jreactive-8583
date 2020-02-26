@@ -6,6 +6,9 @@ import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.nio.ByteBuffer;
 
 @ChannelHandler.Sharable
@@ -23,8 +26,17 @@ public class Iso8583Encoder extends MessageToByteEncoder<IsoMessage> {
             byte[] bytes = isoMessage.writeData();
             out.writeBytes(bytes);
         } else {
-            ByteBuffer byteBuffer = isoMessage.writeToBuffer(lengthHeaderLength);
-            out.writeBytes(byteBuffer);
+            try {
+                OutputStream fout = new FileOutputStream("E:\\00myProj\\0greatDemos\\iso8583\\req.out");
+                ByteArrayOutputStream baos=new ByteArrayOutputStream();
+                isoMessage.write(baos,lengthHeaderLength);
+                byte req[]=baos.toByteArray();
+                fout.write(req);
+                out.writeBytes(req,0,req.length);
+            }catch (Exception e){
+
+            }
+
         }
     }
 }

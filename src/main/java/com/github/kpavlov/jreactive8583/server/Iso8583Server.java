@@ -7,6 +7,7 @@ import com.solab.iso8583.MessageFactory;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelOption;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 import java.net.InetSocketAddress;
@@ -49,8 +50,9 @@ public class Iso8583Server<T extends IsoMessage> extends AbstractIso8583Connecto
                         getIsoMessageFactory(),
                         getMessageHandler()
                 ));
+        bootstrap.childOption(ChannelOption.SO_REUSEADDR, true);
 
-        configureBootstrap(bootstrap);
+        //configureBootstrap(bootstrap);
 
         bootstrap.validate();
 

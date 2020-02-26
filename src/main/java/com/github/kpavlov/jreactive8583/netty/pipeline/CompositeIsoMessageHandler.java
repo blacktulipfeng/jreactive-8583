@@ -34,6 +34,7 @@ public class CompositeIsoMessageHandler<T extends IsoMessage> extends ChannelInb
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        System.out.println("server get a origin msg!");
         if (msg instanceof IsoMessage) {
             doHandleMessage(ctx, msg);
         }

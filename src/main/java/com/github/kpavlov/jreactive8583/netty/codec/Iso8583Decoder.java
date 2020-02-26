@@ -7,6 +7,8 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.text.ParseException;
 import java.util.List;
 
@@ -28,11 +30,16 @@ public class Iso8583Decoder extends ByteToMessageDecoder {
      */
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf byteBuf, List out) throws Exception {
+        System.out.println("Server get message");
         if (!byteBuf.isReadable()) {
             return;
         }
         byte[] bytes = new byte[byteBuf.readableBytes()];
         byteBuf.readBytes(bytes);
+
+        OutputStream fout = new FileOutputStream("E:\\00myProj\\0greatDemos\\iso8583\\server.out");
+        fout.write(bytes, 0, bytes.length);
+
 
         final IsoMessage isoMessage = messageFactory.parseMessage(bytes, 0);
         if (isoMessage != null) {

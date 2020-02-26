@@ -8,7 +8,10 @@ import com.solab.iso8583.MessageFactory;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelOption;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.util.concurrent.Future;
+import io.netty.util.concurrent.GenericFutureListener;
 
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
@@ -45,11 +48,13 @@ public class Iso8583Client<T extends IsoMessage> extends AbstractIso8583Connecto
      * @throws InterruptedException if connection process was interrupted
      * @see #setSocketAddress(SocketAddress)
      */
-    public ChannelFuture connect() throws InterruptedException {
+    public void connect() throws InterruptedException {
         final Channel channel = connectAsync().sync().channel();
+       // final Channel channel = connect().sync().channel();
         assert (channel != null) : "Channel must be set";
         setChannel(channel);
-        return channel.closeFuture();
+/*        ChannelFuture retChannelFuture=channel.closeFuture();
+        return retChannelFuture;*/
     }
 
     /**
@@ -61,8 +66,8 @@ public class Iso8583Client<T extends IsoMessage> extends AbstractIso8583Connecto
      * @throws InterruptedException if connection process was interrupted
      */
     @SuppressWarnings("unused")
-    public ChannelFuture connect(String host, int port) throws InterruptedException {
-        return connect(new InetSocketAddress(host, port));
+    public void connect(String host, int port) throws InterruptedException {
+        connect(new InetSocketAddress(host, port));
     }
 
     /**
@@ -72,9 +77,9 @@ public class Iso8583Client<T extends IsoMessage> extends AbstractIso8583Connecto
      * @return {@link ChannelFuture} which will be notified when connection is established.
      * @throws InterruptedException if connection process was interrupted
      */
-    public ChannelFuture connect(SocketAddress serverAddress) throws InterruptedException {
+    public void connect(SocketAddress serverAddress) throws InterruptedException {
         setSocketAddress(serverAddress);
-        return connect().sync();
+        connect();
     }
 
     /**
@@ -104,6 +109,7 @@ public class Iso8583Client<T extends IsoMessage> extends AbstractIso8583Connecto
 
     @Override
     protected Bootstrap createBootstrap() {
+        this.setSocketAddress(new InetSocketAddress("127.0.0.1", 13055));
         final Bootstrap b = new Bootstrap();
         b.group(getBossEventLoopGroup())
                 .channel(NioSocketChannel.class)
@@ -117,7 +123,8 @@ public class Iso8583Client<T extends IsoMessage> extends AbstractIso8583Connecto
                         getMessageHandler()
                 ));
 
-        configureBootstrap(b);
+        //configureBootstrap(b);
+        b.option(ChannelOption.SO_REUSEADDR, true);
 
         b.validate();
 

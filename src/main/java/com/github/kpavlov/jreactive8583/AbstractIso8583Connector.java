@@ -67,6 +67,7 @@ public abstract class AbstractIso8583Connector<
      */
     public void init() {
         logger.info("Initializing");
+        System.out.println("client init!");
         bossEventLoopGroup = createBossEventLoopGroup();
         workerEventLoopGroup = createWorkerEventLoopGroup();
         bootstrap = createBootstrap();
@@ -84,9 +85,10 @@ public abstract class AbstractIso8583Connector<
     }
 
     protected void configureBootstrap(B bootstrap) {
-        bootstrap.option(ChannelOption.TCP_NODELAY,
+/*        bootstrap.option(ChannelOption.TCP_NODELAY,
                 Boolean.parseBoolean(System.getProperty(
-                        "nfs.rpc.tcp.nodelay", "true")))
+                        "nfs.rpc.tcp.nodelay", "true")))*/
+        bootstrap.option(ChannelOption.SO_REUSEADDR, true)
                 .option(ChannelOption.AUTO_READ, true);
 
         if (configurer != null) {

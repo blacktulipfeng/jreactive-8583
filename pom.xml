@@ -21,7 +21,7 @@
         <j8583.version>1.15.0</j8583.version>
         <mockito.version>3.2.4</mockito.version>
         <netty.version>[4.1.43.Final,4.2)</netty.version>
-        <slf4j.version>[1.7.29,1.8)</slf4j.version>
+        <slf4j.version>1.8</slf4j.version>
         <spring.version>5.2.2.RELEASE</spring.version>
     </properties>
 
@@ -81,13 +81,31 @@
             <artifactId>netty-all</artifactId>
             <version>${netty.version}</version>
         </dependency>
+        <!-- <dependency>
+             <groupId>org.slf4j</groupId>
+             <artifactId>slf4j-api</artifactId>
+             <version>${slf4j.version}</version>
+         </dependency>-->
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.5</version>
+        </dependency>
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
+            <version>1.7.5</version>
         </dependency>
 
-        <!--  Test Dependencies -->
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+        </dependency>
+
+         <!--  Test Dependencies -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>

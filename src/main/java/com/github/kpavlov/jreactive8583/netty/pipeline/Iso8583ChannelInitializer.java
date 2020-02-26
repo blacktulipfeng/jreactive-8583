@@ -67,11 +67,12 @@ public class Iso8583ChannelInitializer<
     public void initChannel(T ch) {
         final ChannelPipeline pipeline = ch.pipeline();
 
-        final int lengthFieldLength = configuration.getFrameLengthFieldLength();
+        //final int lengthFieldLength = configuration.getFrameLengthFieldLength();
+        final int lengthFieldLength = 4;
         pipeline.addLast("lengthFieldFameDecoder",
             new LengthFieldBasedFrameDecoder(
-                configuration.getMaxFrameLength(), configuration.getFrameLengthFieldOffset(), lengthFieldLength,
-                configuration.getFrameLengthFieldAdjust(), lengthFieldLength));
+                    0x7fffffff, 0, 2,
+                0, 2));
         pipeline.addLast("iso8583Decoder", createIso8583Decoder(isoMessageFactory));
 
         pipeline.addLast("iso8583Encoder", isoMessageEncoder);
